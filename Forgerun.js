@@ -1,7 +1,7 @@
-const { InstallationRegistry } = require("./registry");
+const { InstallationRegistry } = require("./src/registry");
 const fs = require("fs");
 const registry = new InstallationRegistry();
-const runclient = require("./index");
+const runclient = require("./src/main");
 
 // Scan for existing installations first
 registry.scanExistingInstallations();

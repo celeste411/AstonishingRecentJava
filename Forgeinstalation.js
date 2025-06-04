@@ -1,12 +1,12 @@
 
-const minecraftlauncher = require("./Encoderdecoder");
+const minecraftlauncher = require("./src/Encoderdecoder");
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 const readline = require("readline");
 
-const skibs = require("./index");
+const skibs = require("./src/main");
 
 async function main() {
   try {
