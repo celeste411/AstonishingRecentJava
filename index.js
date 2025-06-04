@@ -153,8 +153,7 @@ async function downloadMinecraft(version) {
   registry.addInstallation(version.id, {
     type: versionJSON.type,
     jarPath,
-    jsonPath,
-    librariesCount: libPaths.length
+    jsonPath
   });
 
   return { versionJSON, jarPath, libPaths };

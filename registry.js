@@ -41,7 +41,6 @@ class InstallationRegistry {
       lastAccessed: timestamp,
       jarPath: installData.jarPath,
       jsonPath: installData.jsonPath,
-      librariesCount: installData.librariesCount || 0,
       size: this.getInstallationSize(versionId),
       hasForge: false, // Will be updated when Forge is installed
       forgeVersion: null
@@ -139,7 +138,6 @@ class InstallationRegistry {
       console.log(`   🕒 Last accessed: ${lastAccessedDate}`);
       console.log(`   📊 Size: ${sizeStr}`);
       console.log(`   🏷️  Type: ${install.type}`);
-      console.log(`   📚 Libraries: ${install.librariesCount}`);
       if (install.hasForge) {
         console.log(`   🔧 Forge: ${install.forgeVersion}`);
       }
