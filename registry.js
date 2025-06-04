@@ -174,31 +174,31 @@ class InstallationRegistry {
     return Object.values(this.installations);
   }
 
-  pullInstallation(versionId, destinationDir) {
+  pullInstallation(versionId) {
     const installation = this.getInstallation(versionId);
     if (!installation) {
       console.log(`❌ Installation ${versionId} not found in registry`);
-      return false;
+      return null;
     }
 
     try {
-      // Create destination directory
-      fs.mkdirSync(destinationDir, { recursive: true });
+      const result = {
+        jarPath: null,
+        jsonPath: null
+      };
 
-      // Copy JAR file
+      // Check JAR file
       if (fs.existsSync(installation.jarPath)) {
-        const jarDestination = path.join(destinationDir, `${versionId}.jar`);
-        fs.copyFileSync(installation.jarPath, jarDestination);
-        console.log(`✅ Pulled JAR: ${jarDestination}`);
+        result.jarPath = installation.jarPath;
+        console.log(`✅ JAR path: ${installation.jarPath}`);
       } else {
         console.log(`⚠️ JAR file not found: ${installation.jarPath}`);
       }
 
-      // Copy JSON file
+      // Check JSON file
       if (fs.existsSync(installation.jsonPath)) {
-        const jsonDestination = path.join(destinationDir, `${versionId}.json`);
-        fs.copyFileSync(installation.jsonPath, jsonDestination);
-        console.log(`✅ Pulled JSON: ${jsonDestination}`);
+        result.jsonPath = installation.jsonPath;
+        console.log(`✅ JSON path: ${installation.jsonPath}`);
       } else {
         console.log(`⚠️ JSON file not found: ${installation.jsonPath}`);
       }
@@ -206,12 +206,12 @@ class InstallationRegistry {
       // Update last accessed time
       this.updateLastAccessed(versionId);
 
-      console.log(`🎯 Successfully pulled ${versionId} to ${destinationDir}`);
-      return true;
+      console.log(`🎯 Successfully retrieved paths for ${versionId}`);
+      return result;
 
     } catch (error) {
-      console.error(`❌ Failed to pull ${versionId}:`, error.message);
-      return false;
+      console.error(`❌ Failed to get paths for ${versionId}:`, error.message);
+      return null;
     }
   }
 
