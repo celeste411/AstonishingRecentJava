@@ -2,7 +2,7 @@
 #!/usr/bin/env node
 const { InstallationRegistry } = require("./registry");
 
-async function showMenu(registry) {
+function showMenu(registry) {
   const readline = require("readline");
   const rl = readline.createInterface({
     input: process.stdin,
