@@ -173,6 +173,68 @@ class InstallationRegistry {
   getAllInstallations() {
     return Object.values(this.installations);
   }
+
+  pullInstallation(versionId, destinationDir) {
+    const installation = this.getInstallation(versionId);
+    if (!installation) {
+      console.log(`❌ Installation ${versionId} not found in registry`);
+      return false;
+    }
+
+    try {
+      // Create destination directory
+      fs.mkdirSync(destinationDir, { recursive: true });
+
+      // Copy JAR file
+      if (fs.existsSync(installation.jarPath)) {
+        const jarDestination = path.join(destinationDir, `${versionId}.jar`);
+        fs.copyFileSync(installation.jarPath, jarDestination);
+        console.log(`✅ Pulled JAR: ${jarDestination}`);
+      } else {
+        console.log(`⚠️ JAR file not found: ${installation.jarPath}`);
+      }
+
+      // Copy JSON file
+      if (fs.existsSync(installation.jsonPath)) {
+        const jsonDestination = path.join(destinationDir, `${versionId}.json`);
+        fs.copyFileSync(installation.jsonPath, jsonDestination);
+        console.log(`✅ Pulled JSON: ${jsonDestination}`);
+      } else {
+        console.log(`⚠️ JSON file not found: ${installation.jsonPath}`);
+      }
+
+      // Update last accessed time
+      this.updateLastAccessed(versionId);
+
+      console.log(`🎯 Successfully pulled ${versionId} to ${destinationDir}`);
+      return true;
+
+    } catch (error) {
+      console.error(`❌ Failed to pull ${versionId}:`, error.message);
+      return false;
+    }
+  }
+
+  pullAllInstallations(destinationDir) {
+    const installations = this.getAllInstallations();
+    if (installations.length === 0) {
+      console.log("📭 No installations to pull");
+      return false;
+    }
+
+    console.log(`📦 Pulling ${installations.length} installations to ${destinationDir}...`);
+
+    let successCount = 0;
+    installations.forEach(installation => {
+      const versionDir = path.join(destinationDir, installation.id);
+      if (this.pullInstallation(installation.id, versionDir)) {
+        successCount++;
+      }
+    });
+
+    console.log(`✅ Successfully pulled ${successCount}/${installations.length} installations`);
+    return successCount > 0;
+  }
 }
 
 module.exports = { InstallationRegistry };
