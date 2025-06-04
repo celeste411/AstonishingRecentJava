@@ -39,11 +39,20 @@ async function getAllClientJarLinks() {
 
 
 const fs = require('node:fs');
-const content = getAllClientJarLinks();
-fs.writeFile('test.txt', content, err => {
-  if (err) {
-    console.error(err);
-  } else {
-    // file written successfully
+
+async function writeToFile() {
+  try {
+    const content = await getAllClientJarLinks();
+    fs.writeFile('test.txt', content, err => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log('File written successfully');
+      }
+    });
+  } catch (error) {
+    console.error('Error getting client jar links:', error);
   }
-});
+}
+
+writeToFile();
