@@ -3,10 +3,13 @@ const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 const readline = require("readline");
+const { InstallationRegistry } = require("./registry");
 
 const MINECRAFT_DIR = path.join(__dirname, ".minecraft");
 const VERSION_MANIFEST =
   "https://launchermeta.mojang.com/mc/game/version_manifest.json";
+
+const registry = new InstallationRegistry();
 
 async function download(url, dest) {
   return new Promise((resolve, reject) => {
@@ -146,6 +149,14 @@ async function downloadMinecraft(version) {
     console.log(`✅ All libraries downloaded`);
   }
 
+  // Register the installation
+  registry.addInstallation(version.id, {
+    type: versionJSON.type,
+    jarPath,
+    jsonPath,
+    librariesCount: libPaths.length
+  });
+
   return { versionJSON, jarPath, libPaths };
 }
 
@@ -189,6 +200,10 @@ async function launchMinecraft(versionData, jarPath, libPaths) {
   }
 
   console.log(`\n🚀 Launching Minecraft ${versionData.id}...`);
+  
+  // Update last accessed time
+  registry.updateLastAccessed(versionData.id);
+  
   const child = spawn("java", args);
   child.stdout.on("data", (d) => process.stdout.write(d));
   child.stderr.on("data", (d) => process.stderr.write(d));
@@ -209,4 +224,4 @@ async function main(selectedVersion) {
 }
 
 //main();
-module.exports = { main, launchMinecraft, downloadMinecraft }
+module.exports = { main, launchMinecraft, downloadMinecraft, registry }
