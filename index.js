@@ -138,18 +138,29 @@ async function downloadMinecraft(version) {
 
     console.log(`📦 Downloading ${libPaths.length} libraries...`);
     for (const lib of libPaths) {
-      if (!fs.existsSync(lib.path)) await download(lib.url, lib.path);
+      if (!fs.existsSync(lib.path)) {
+        console.log(`⬇️ Downloading: ${path.basename(lib.path)}`);
+        await download(lib.url, lib.path);
+      }
     }
+    console.log(`✅ All libraries downloaded`);
   }
 
   return { versionJSON, jarPath, libPaths };
 }
 
 async function launchMinecraft(versionData, jarPath, libPaths) {
+  // Ensure jopt-simple is in the classpath
+  const joptSimplePath = path.join(MINECRAFT_DIR, "libraries", "net", "sf", "jopt-simple", "jopt-simple", "5.0.4", "jopt-simple-5.0.4.jar");
+  
   const cp = libPaths
     .map((l) => l.path)
     .concat([jarPath])
     .join(path.delimiter);
+  
+  console.log(`🔍 Checking jopt-simple at: ${joptSimplePath}`);
+  console.log(`📁 Exists: ${fs.existsSync(joptSimplePath)}`);
+  
   const mainClass = versionData.mainClass || "net.minecraft.client.Minecraft";
 
   const args = [
