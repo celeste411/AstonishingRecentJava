@@ -16,7 +16,7 @@ async function showMenu(registry) {
     console.log("3. Show installations again");
     console.log("4. Exit");
     
-    rl.question("\nSelect option (1-4): ", async (answer) => {
+    rl.question("\nSelect option (1-4): ", (answer) => {
       switch(answer) {
         case "1":
           console.log("🔄 Refreshing registry...");
@@ -67,7 +67,12 @@ async function main() {
   // Interactive menu loop
   let shouldExit = false;
   while (!shouldExit) {
-    shouldExit = await showMenu(registry);
+    try {
+      shouldExit = await showMenu(registry);
+    } catch (error) {
+      console.error("❌ Menu error:", error.message);
+      shouldExit = true;
+    }
   }
 }
 
