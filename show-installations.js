@@ -20,29 +20,44 @@ function showMenu(registry) {
       switch(answer) {
         case "1":
           console.log("🔄 Refreshing registry...");
-          registry.scanExistingInstallations();
-          console.log("✅ Registry refreshed!");
-          registry.displayInstallations();
+          try {
+            registry.scanExistingInstallations();
+            console.log("✅ Registry refreshed!");
+            registry.displayInstallations();
+          } catch (error) {
+            console.error("❌ Error refreshing registry:", error.message);
+          }
           rl.close();
           resolve(false); // Continue menu
           break;
+          
         case "2":
           rl.question("Enter version ID to remove: ", (versionId) => {
-            if (registry.removeInstallation(versionId)) {
-              console.log("✅ Installation removed from registry");
-            } else {
-              console.log("❌ Installation not found in registry");
+            try {
+              if (registry.removeInstallation(versionId)) {
+                console.log("✅ Installation removed from registry");
+              } else {
+                console.log("❌ Installation not found in registry");
+              }
+              registry.displayInstallations();
+            } catch (error) {
+              console.error("❌ Error removing installation:", error.message);
             }
-            registry.displayInstallations();
             rl.close();
             resolve(false); // Continue menu
           });
           break;
+          
         case "3":
-          registry.displayInstallations();
+          try {
+            registry.displayInstallations();
+          } catch (error) {
+            console.error("❌ Error displaying installations:", error.message);
+          }
           rl.close();
           resolve(false); // Continue menu
           break;
+          
         case "4":
         default:
           console.log("👋 Goodbye!");
@@ -55,25 +70,33 @@ function showMenu(registry) {
 }
 
 async function main() {
-  const registry = new InstallationRegistry();
-  
-  // Scan for any existing installations not in registry
-  console.log("🔍 Scanning for installations...");
-  registry.scanExistingInstallations();
-  
-  // Display all installations
-  registry.displayInstallations();
-  
-  // Interactive menu loop
-  let shouldExit = false;
-  while (!shouldExit) {
-    try {
-      shouldExit = await showMenu(registry);
-    } catch (error) {
-      console.error("❌ Menu error:", error.message);
-      shouldExit = true;
+  try {
+    const registry = new InstallationRegistry();
+    
+    // Scan for any existing installations not in registry
+    console.log("🔍 Scanning for installations...");
+    registry.scanExistingInstallations();
+    
+    // Display all installations
+    registry.displayInstallations();
+    
+    // Interactive menu loop
+    let shouldExit = false;
+    while (!shouldExit) {
+      try {
+        shouldExit = await showMenu(registry);
+      } catch (error) {
+        console.error("❌ Menu error:", error.message);
+        shouldExit = true;
+      }
     }
+  } catch (error) {
+    console.error("❌ Application error:", error.message);
+    process.exit(1);
   }
 }
 
-main().catch(console.error);
+main().catch(error => {
+  console.error("❌ Fatal error:", error.message);
+  process.exit(1);
+});
