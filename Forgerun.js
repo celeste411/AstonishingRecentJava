@@ -7,7 +7,7 @@ const runclient = require("./src/main");
 registry.scanExistingInstallations();
 
 // Pull the installation paths
-const paths = registry.pullInstallation("1.20.1");
+const paths = registry.pullInstallation("1.18.1");
 
 if (paths) {
   console.log("📁 Retrieved file paths:");
