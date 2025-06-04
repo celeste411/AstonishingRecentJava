@@ -144,7 +144,19 @@ async function downloadMinecraft(version) {
             url: jarURL
           }
         },
-        libraries: []
+        libraries: [
+          {
+            name: "net.sf.jopt-simple:jopt-simple:5.0.4",
+            downloads: {
+              artifact: {
+                path: "net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
+                url: "https://libraries.minecraft.net/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar",
+                sha1: "4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c",
+                size: 78175
+              }
+            }
+          }
+        ]
       };
     }
   } else {
