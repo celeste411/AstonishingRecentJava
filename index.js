@@ -44,16 +44,16 @@ async function getAvailableVersions() {
 }
 
 function createVersionList(versions) {
-  const releaseVersions = versions.filter(v => v.type === 'release').slice(0, 20);
-  const snapshotVersions = versions.filter(v => v.type === 'snapshot').slice(0, 10);
+  const releaseVersions = versions.filter(v => v.type === 'release');
+  const snapshotVersions = versions.filter(v => v.type === 'snapshot');
   
   console.log('\n=== MINECRAFT VERSION SELECTOR ===\n');
-  console.log('📦 RELEASE VERSIONS (Latest 20):');
+  console.log(`📦 ALL RELEASE VERSIONS (${releaseVersions.length} total):`);
   releaseVersions.forEach((version, index) => {
     console.log(`${index + 1}. ${version.id} (${version.releaseTime.split('T')[0]})`);
   });
   
-  console.log('\n🔬 SNAPSHOT VERSIONS (Latest 10):');
+  console.log(`\n🔬 ALL SNAPSHOT VERSIONS (${snapshotVersions.length} total):`);
   const startIndex = releaseVersions.length;
   snapshotVersions.forEach((version, index) => {
     console.log(`${startIndex + index + 1}. ${version.id} (${version.releaseTime.split('T')[0]})`);
@@ -186,6 +186,32 @@ async function main() {
 }
 
 // Save version list to file for reference
+async function displayAllVersions() {
+  try {
+    const versions = await getAvailableVersions();
+    const releaseVersions = versions.filter(v => v.type === 'release');
+    const snapshotVersions = versions.filter(v => v.type === 'snapshot');
+    
+    console.log('\n=== ALL MINECRAFT VERSIONS ===\n');
+    console.log(`Total versions available: ${versions.length}`);
+    console.log(`📦 Releases: ${releaseVersions.length}`);
+    console.log(`🔬 Snapshots: ${snapshotVersions.length}\n`);
+    
+    console.log('📦 ALL RELEASE VERSIONS:');
+    releaseVersions.forEach((version, index) => {
+      console.log(`${index + 1}. ${version.id} (${version.releaseTime.split('T')[0]})`);
+    });
+    
+    console.log('\n🔬 ALL SNAPSHOT VERSIONS:');
+    snapshotVersions.forEach((version, index) => {
+      console.log(`${index + 1}. ${version.id} (${version.releaseTime.split('T')[0]})`);
+    });
+    
+  } catch (error) {
+    console.error('Error fetching versions:', error);
+  }
+}
+
 async function saveVersionList() {
   try {
     const versions = await getAvailableVersions();
@@ -210,6 +236,9 @@ async function saveVersionList() {
     console.error('Error saving version list:', error);
   }
 }
+
+// Uncomment the line below to display all versions without launching
+// displayAllVersions();
 
 // Run the program
 main();
