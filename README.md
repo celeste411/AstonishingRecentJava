@@ -1,0 +1,1 @@
+this is a custom cracked minecraft client built off of node and java and electron ( not yet )  as a gui this contains a registry with logged instances of minecraft and you can use forgeinstalation to make an instance with a custom version
