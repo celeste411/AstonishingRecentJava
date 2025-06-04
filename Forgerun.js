@@ -1,6 +1,6 @@
 const { InstallationRegistry } = require("./registry");
 const registry = new InstallationRegistry();
-
+const runclient = require("./index");
 // Scan for existing installations first
 registry.scanExistingInstallations();
 
@@ -14,3 +14,4 @@ if (paths) {
 } else {
   console.log("❌ Failed to retrieve installation paths");
 }
+runclient.launchMinecraft(paths.jsonPath, paths.jarPath)
