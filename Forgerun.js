@@ -1,6 +1,6 @@
 const { InstallationRegistry } = require("./registry");
 const registry = new InstallationRegistry();
-
+const runclient = require("./index");
 // Scan for existing installations first
 registry.scanExistingInstallations();
 
@@ -15,6 +15,8 @@ if (paths) {
   if (paths.jarPath && paths.jsonPath) {
     console.log("🚀 Ready to launch Minecraft with these files!");
     console.log("✅ All required files found for version 1.21.5");
+    runclient.launchMinecraft(paths.jsonPath, paths.jarPath)
+    
   } else {
     console.log("⚠️ Some required files are missing");
   }
