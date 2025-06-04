@@ -62,41 +62,4 @@ function showMenu(registry) {
         default:
           console.log("👋 Goodbye!");
           rl.close();
-          resolve(true); // Exit
-          break;
-      }
-    });
-  });
-}
-
-async function main() {
-  try {
-    const registry = new InstallationRegistry();
-    
-    // Scan for any existing installations not in registry
-    console.log("🔍 Scanning for installations...");
-    registry.scanExistingInstallations();
-    
-    // Display all installations
-    registry.displayInstallations();
-    
-    // Interactive menu loop
-    let shouldExit = false;
-    while (!shouldExit) {
-      try {
-        shouldExit = await showMenu(registry);
-      } catch (error) {
-        console.error("❌ Menu error:", error.message);
-        shouldExit = true;
-      }
-    }
-  } catch (error) {
-    console.error("❌ Application error:", error.message);
-    process.exit(1);
-  }
-}
-
-main().catch(error => {
-  console.error("❌ Fatal error:", error.message);
-  process.exit(1);
-});
+          resolve(
