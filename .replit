@@ -1,5 +1,5 @@
 entrypoint = "src/main.js"
-modules = ["nodejs-22", "swift-5.6", "java-graalvm22.3"]
+modules = ["java-graalvm22.3", "nodejs-22", "python-3.11", "swift-5.6"]
 hidden = [".config", "package-lock.json"]
 
 [gitHubImport]
@@ -7,8 +7,25 @@ requiredFiles = [".replit", "replit.nix", "package.json", "package-lock.json"]
 
 [nix]
 channel = "stable-24_11"
+packages = ["unzip"]
 
 [deployment]
 run = ["node", "src/main.js"]
 deploymentTarget = "autoscale"
 ignorePorts = false
+
+[workflows]
+runButton = "Testingpublic"
+
+[[workflows.workflow]]
+name = "Testingpublic"
+mode = "sequential"
+author = 43071003
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 -m http.server"
+
+[[ports]]
+localPort = 8000
+externalPort = 80

@@ -1,0 +1,24 @@
+{
+  "1.19.4": {
+    "id": "1.19.4",
+    "type": "release",
+    "installedAt": "2025-06-05T06:06:07.023Z",
+    "lastAccessed": "2025-06-05T06:06:07.023Z",
+    "jarPath": "/home/runner/workspace/.minecraft/versions/1.19.4/1.19.4.jar",
+    "jsonPath": "/home/runner/workspace/.minecraft/versions/1.19.4/1.19.4.json",
+    "size": 23523433,
+    "hasForge": false,
+    "forgeVersion": null
+  },
+  "1.21.5": {
+    "id": "1.21.5",
+    "type": "release",
+    "installedAt": "2025-06-05T06:06:28.485Z",
+    "lastAccessed": "2025-06-05T06:06:28.485Z",
+    "jarPath": "/home/runner/workspace/.minecraft/versions/1.21.5/1.21.5.jar",
+    "jsonPath": "/home/runner/workspace/.minecraft/versions/1.21.5/1.21.5.json",
+    "size": 29043854,
+    "hasForge": false,
+    "forgeVersion": null
+  }
+}
