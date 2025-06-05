@@ -1,0 +1,17 @@
+            <div class="main__crossing-container">
+              <div class="main__crossing-image">
+                <img src="https://images.unsplash.com/photo-1595064085577-7c2ef98ec311?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=70&ixid=eyJhcHBfaWQiOjF9&ixlib=rb-1.2.1&q=80&w=70" alt="">
+              </div>
+              <div class="main__crossing-current">
+                <p class="main__crossing-upper">
+                  Now crossing
+                </p>
+                <h3 class="main__crossing-heading">
+                  Center Point
+                </h3>
+              </div>
+            </div>
+
+
+
+            163 start

@@ -1,0 +1,48 @@
+[21:24:01] [main/INFO]: Building optimized datafixer
+[21:24:04] [Render thread/INFO]: [STDERR]: [LWJGL] [ThreadLocalUtil] Unsupported JNI version detected, this may result in a crash. Please inform LWJGL developers.
+[21:24:04] [Render thread/ERROR]: Can't find the resource index file: C:\Users\aaron\OneDrive\Documents\minecraft launcher project\.minecraft\assets\indexes\1.19.json
+[21:24:04] [Render thread/INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[21:24:05] [Render thread/ERROR]: Failed to verify authentication
+com.mojang.authlib.exceptions.InvalidCredentialsException: Status: 401
+	at com.mojang.authlib.exceptions.MinecraftClientHttpException.toAuthenticationException(MinecraftClientHttpException.java:56) ~[authlib-3.11.50.jar:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilUserApiService.fetchProperties(YggdrasilUserApiService.java:155) ~[authlib-3.11.50.jar:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilUserApiService.<init>(YggdrasilUserApiService.java:55) ~[authlib-3.11.50.jar:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService.createUserApiService(YggdrasilAuthenticationService.java:161) ~[authlib-3.11.50.jar:?]
+	at efu.a(SourceFile:710) [1.19.1.jar:?]
+	at efu.<init>(SourceFile:430) [1.19.1.jar:?]
+	at net.minecraft.client.main.Main.a(SourceFile:205) [1.19.1.jar:?]
+	at net.minecraft.client.main.Main.main(SourceFile:51) [1.19.1.jar:?]
+Caused by: com.mojang.authlib.exceptions.MinecraftClientHttpException: Status: 401
+	at com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:85) ~[authlib-3.11.50.jar:?]
+	at com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:48) ~[authlib-3.11.50.jar:?]
+	at com.mojang.authlib.yggdrasil.YggdrasilUserApiService.fetchProperties(YggdrasilUserApiService.java:129) ~[authlib-3.11.50.jar:?]
+	... 6 more
+[21:24:05] [Render thread/INFO]: Setting user: OfflinePlayer
+[21:24:05] [Render thread/INFO]: Backend library: LWJGL version 3.3.1 build 7
+[21:24:09] [Render thread/ERROR]: Couldn't set icon
+java.io.FileNotFoundException: icons/icon_16x16.png
+	at aho.a(SourceFile:121) ~[1.19.1.jar:?]
+	at efu.<init>(SourceFile:491) [1.19.1.jar:?]
+	at net.minecraft.client.main.Main.a(SourceFile:205) [1.19.1.jar:?]
+	at net.minecraft.client.main.Main.main(SourceFile:51) [1.19.1.jar:?]
+[21:24:11] [Worker-Main-32/ERROR]: Failed to retrieve profile key pair
+java.io.IOException: Could not retrieve profile key pair
+	at eva.b(SourceFile:122) ~[1.19.1.jar:?]
+	at eva.c(SourceFile:62) [1.19.1.jar:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1814) [?:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1806) [?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:507) [?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1394) [?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1970) [?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:187) [?:?]
+[21:24:11] [Render thread/INFO]: Reloading ResourceManager: Default
+[21:24:12] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: 0
+[21:24:12] [Render thread/INFO]: Stopping!
+[21:24:14] [Render thread/ERROR]: Shutdown failure!
+java.util.ConcurrentModificationException: null
+	at java.util.HashMap.forEach(HashMap.java:1433) ~[?:?]
+	at fkf.close(SourceFile:173) ~[1.19.1.jar:?]
+	at efu.close(SourceFile:1091) [1.19.1.jar:?]
+	at efu.l(SourceFile:1067) [1.19.1.jar:?]
+	at net.minecraft.client.main.Main.a(SourceFile:260) [1.19.1.jar:?]
+	at net.minecraft.client.main.Main.main(SourceFile:51) [1.19.1.jar:?]

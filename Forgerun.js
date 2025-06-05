@@ -2,51 +2,55 @@ const { InstallationRegistry } = require("./src/registry");
 const fs = require("fs");
 const registry = new InstallationRegistry();
 const runclient = require("./src/main");
+function start() {
+  // Scan for existing installations first
+  registry.scanExistingInstallations();
 
-// Scan for existing installations first
-registry.scanExistingInstallations();
+  // Pull the installation paths
+  const paths = registry.pullInstallation("1.19.1");
 
-// Pull the installation paths
-const paths = registry.pullInstallation("1.18.1");
-
-if (paths) {
-  console.log("📁 Retrieved file paths:");
-  console.log(`   JAR: ${paths.jarPath}`);
-  console.log(`   JSON: ${paths.jsonPath}`);
-  
-  if (paths.jarPath && paths.jsonPath) {
-    console.log("🚀 Ready to launch Minecraft with these files!");
-    console.log("✅ All required files found for version 1.21.5");
+  if (paths) {
+    console.log("📁 Retrieved file paths:");
+    console.log(`   JAR: ${paths.jarPath}`);
+    console.log(`   JSON: ${paths.jsonPath}`);
     
-    try {
-      // Read and parse the JSON file
-      const versionData = JSON.parse(fs.readFileSync(paths.jsonPath, 'utf8'));
+    if (paths.jarPath && paths.jsonPath) {
+      console.log("🚀 Ready to launch Minecraft with these files!");
+      console.log("✅ All required files found for version 1.21.5");
       
-      // Generate library paths from the version data
-      const libPaths = versionData.libraries
-        ? versionData.libraries
-            .filter(lib => !lib.rules || lib.rules.every(rule => rule.action === "allow"))
-            .map(lib => {
-              const artifact = lib.downloads?.artifact;
-              if (!artifact) return null;
-              return { 
-                path: require("path").join(__dirname, ".minecraft", "libraries", artifact.path.replace(/\//g, require("path").sep))
-              };
-            })
-            .filter(Boolean)
-        : [];
+      try {
+        // Read and parse the JSON file
+        const versionData = JSON.parse(fs.readFileSync(paths.jsonPath, 'utf8'));
+        
+        // Generate library paths from the version data
+        const libPaths = versionData.libraries
+          ? versionData.libraries
+              .filter(lib => !lib.rules || lib.rules.every(rule => rule.action === "allow"))
+              .map(lib => {
+                const artifact = lib.downloads?.artifact;
+                if (!artifact) return null;
+                return { 
+                  path: require("path").join(__dirname, ".minecraft", "libraries", artifact.path.replace(/\//g, require("path").sep))
+                };
+              })
+              .filter(Boolean)
+          : [];
+        
+        // Launch Minecraft with correct parameters
+        runclient.launchMinecraft(versionData, paths.jarPath, libPaths);
+        
+      } catch (error) {
+        console.error("❌ Error launching Minecraft:", error.message);
+      }
       
-      // Launch Minecraft with correct parameters
-      runclient.launchMinecraft(versionData, paths.jarPath, libPaths);
-      
-    } catch (error) {
-      console.error("❌ Error launching Minecraft:", error.message);
+    } else {
+      console.log("⚠️ Some required files are missing");
     }
-    
   } else {
-    console.log("⚠️ Some required files are missing");
+    console.log("❌ Failed to retrieve installation paths");
+    console.log("💡 Make sure version 1.21.5 is installed first");
   }
-} else {
-  console.log("❌ Failed to retrieve installation paths");
-  console.log("💡 Make sure version 1.21.5 is installed first");
 }
+module.exports = {
+  start: start
+};
