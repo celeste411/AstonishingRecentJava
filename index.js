@@ -1,8 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
-const fs = require('fs')
-const path = require('path')
-const start = require('./Forgerun.js')
-
+const { app, BrowserWindow, ipcMain } = require("electron");
+const fs = require("fs");
+const path = require("path");
+const start = require("./Forgerun.js");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -10,17 +9,17 @@ function createWindow() {
     height: 300,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false // WARNING: Only use this for prototyping
-    }
-  })
+      contextIsolation: false, // WARNING: Only use this for prototyping
+    },
+  });
 
-  win.loadFile('index.html')
+  win.loadFile("MinecraftLauncher/index.html");
 }
 
 app.whenReady().then(() => {
   createWindow();
 
-  ipcMain.handle('do-node-stuff', async () => {
-    start.start()
-  })
-})
+  ipcMain.handle("do-node-stuff", async () => {
+    start.start();
+  });
+});
