@@ -70,7 +70,6 @@ function initializeLaunchButton() {
     
     if (launchBtn) {
         launchBtn.addEventListener('click', function() {
-            const selectedVersion = document.getElementById('version-select').value;
             const selectedProfile = document.getElementById('profile-select').value;
             
             console.log(`Launching Minecraft ${selectedVersion} with profile: ${selectedProfile}`);
