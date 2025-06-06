@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const start = require("./Forgerun.js");
-const instalation = require("./Forgeinstalation.js")
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 400,
@@ -20,9 +20,6 @@ app.whenReady().then(() => {
   createWindow();
 
   ipcMain.handle("do-node-stuff", async () => {
-    start.start();
-  });
-  ipcMain.handle("add-profile/installation", async () => {
     start.start();
   });
 });
