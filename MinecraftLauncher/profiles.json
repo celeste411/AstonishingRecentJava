@@ -1,0 +1,53 @@
+{
+  "profiles": [
+    {
+      "id": "default",
+      "name": "Default Profile",
+      "version": "1.20.4",
+      "modLoader": "vanilla",
+      "icon": "default",
+      "gameDirectory": ".minecraft",
+      "javaPath": "Auto-detect",
+      "memoryAllocation": 4096,
+      "jvmArgs": "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC",
+      "active": true,
+      "created": "2024-01-01T00:00:00Z",
+      "lastUsed": "2024-06-05T10:00:00Z"
+    },
+    {
+      "id": "modded",
+      "name": "Modded Profile",
+      "version": "1.19.4",
+      "modLoader": "forge",
+      "icon": "modded",
+      "gameDirectory": ".minecraft/profiles/modded",
+      "javaPath": "Auto-detect",
+      "memoryAllocation": 6144,
+      "jvmArgs": "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:MaxGCPauseMillis=50",
+      "active": false,
+      "created": "2024-01-15T00:00:00Z",
+      "lastUsed": "2024-06-04T15:30:00Z"
+    },
+    {
+      "id": "creative",
+      "name": "Creative Profile",
+      "version": "1.20.4",
+      "modLoader": "vanilla",
+      "icon": "creative",
+      "gameDirectory": ".minecraft/profiles/creative",
+      "javaPath": "Auto-detect",
+      "memoryAllocation": 4096,
+      "jvmArgs": "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC",
+      "active": false,
+      "created": "2024-02-01T00:00:00Z",
+      "lastUsed": "2024-06-03T20:45:00Z"
+    },
+
+    {
+      "id": "default",
+      "name": "Default Profile",
+      "version": "1.20.4",
+      "modLoader": "vanilla",
+      "icon": "default",
+      "gameDirectory": ".minecraft",
+      "
