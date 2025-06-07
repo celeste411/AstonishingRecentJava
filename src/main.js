@@ -103,7 +103,7 @@ async function selectVersion() {
   });
 }
 
-async function downloadMinecraft(version) {
+async function downloadMinecraft(version, profileName) {
   const versionDir = path.join(MINECRAFT_DIR, "versions", version.id);
   fs.mkdirSync(versionDir, { recursive: true });
 
@@ -155,7 +155,7 @@ async function downloadMinecraft(version) {
     type: versionJSON.type,
     jarPath,
     jsonPath
-  });
+  }, profileName);
 
   return { versionJSON, jarPath, libPaths };
 }

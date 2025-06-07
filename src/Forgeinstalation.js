@@ -1,14 +1,14 @@
 
-const minecraftlauncher = require("./src/Encoderdecoder");
+const minecraftlauncher = require("./Encoderdecoder");
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 const readline = require("readline");
 
-const skibs = require("./src/main");
+const skibs = require("./main");
 
-async function main() {
+async function main(profileName) {
   try {
     console.log("🔧 Starting Forge Installation Process...");
     
@@ -34,7 +34,7 @@ async function main() {
       console.log(`   Size: ${skibs.registry.formatSize(existingInstall.size)}`);
     } else {
       // Download Minecraft
-      const { versionJSON, jarPath, libPaths } = await skibs.downloadMinecraft(selected);
+      const { versionJSON, jarPath, libPaths } = await skibs.downloadMinecraft(selected, profileName);
       console.log("✅ Minecraft downloaded successfully!");
     }
     
@@ -47,4 +47,4 @@ async function main() {
   }
 }
 
-main();
+module.exports = {  main };

@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const fs = require("fs");
 const path = require("path");
-const start = require("./Forgerun.js");
+const start = require("./src/Forgerun.js");
 
 function createWindow() {
   const win = new BrowserWindow({

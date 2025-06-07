@@ -1,4 +1,3 @@
-
 const fs = require("fs");
 const path = require("path");
 
@@ -14,7 +13,7 @@ class InstallationRegistry {
   loadRegistry() {
     try {
       if (fs.existsSync(this.registryPath)) {
-        const data = fs.readFileSync(this.registryPath, 'utf8');
+        const data = fs.readFileSync(this.registryPath, "utf8");
         return JSON.parse(data);
       }
     } catch (error) {
@@ -32,9 +31,10 @@ class InstallationRegistry {
     }
   }
 
-  addInstallation(versionId, installData) {
+  addInstallation(versionId, installData, profileName) {
     const timestamp = new Date().toISOString();
-    this.installations[versionId] = {
+    this.installations[profileName] = {
+      profileName,
       id: versionId,
       type: installData.type || "unknown",
       installedAt: timestamp,
@@ -42,16 +42,16 @@ class InstallationRegistry {
       jarPath: installData.jarPath,
       jsonPath: installData.jsonPath,
       size: this.getInstallationSize(versionId),
-      hasForge: false, // Will be updated when Forge is installed
+      hasForge: false,
       forgeVersion: null
     };
     this.saveRegistry();
     console.log(`✅ Added ${versionId} to registry`);
   }
 
-  updateLastAccessed(versionId) {
-    if (this.installations[versionId]) {
-      this.installations[versionId].lastAccessed = new Date().toISOString();
+  updateLastAccessed(profileName) {
+    if (this.installations[profileName]) {
+      this.installations[profileName].lastAccessed = new Date().toISOString();
       this.saveRegistry();
     }
   }
@@ -60,26 +60,26 @@ class InstallationRegistry {
     try {
       const versionDir = path.join(MINECRAFT_DIR, "versions", versionId);
       if (!fs.existsSync(versionDir)) return 0;
-      
+
       let size = 0;
       const files = fs.readdirSync(versionDir);
-      files.forEach(file => {
+      for (const file of files) {
         const filePath = path.join(versionDir, file);
         const stats = fs.statSync(filePath);
         size += stats.size;
-      });
+      }
       return size;
-    } catch (error) {
+    } catch {
       return 0;
     }
   }
 
   formatSize(bytes) {
-    if (bytes === 0) return '0 B';
+    if (bytes === 0) return "0 B";
     const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const sizes = ["B", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }
 
   scanExistingInstallations() {
@@ -88,42 +88,38 @@ class InstallationRegistry {
 
     console.log("🔍 Scanning for existing installations...");
     const versionFolders = fs.readdirSync(versionsDir);
-    
-    versionFolders.forEach(versionId => {
+
+    for (const versionId of versionFolders) {
       const versionDir = path.join(versionsDir, versionId);
       const jarPath = path.join(versionDir, `${versionId}.jar`);
       const jsonPath = path.join(versionDir, `${versionId}.json`);
-      
-      if (fs.existsSync(jarPath) && !this.installations[versionId]) {
+
+      if (fs.existsSync(jarPath) && !Object.values(this.installations).some(i => i.id === versionId)) {
         let versionType = "unknown";
         try {
           if (fs.existsSync(jsonPath)) {
-            const versionData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+            const versionData = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
             versionType = versionData.type || "unknown";
           }
-        } catch (error) {
-          // Ignore JSON parsing errors
+        } catch {
+          // Ignore
         }
-        
-        this.addInstallation(versionId, {
-          type: versionType,
-          jarPath,
-          jsonPath
-        });
+
+        const profileName = versionId;
+        this.addInstallation(versionId, { type: versionType, jarPath, jsonPath }, profileName);
       }
-    });
+    }
   }
 
   displayInstallations() {
     console.log("\n=== MINECRAFT INSTALLATIONS REGISTRY ===\n");
-    
+
     const installations = Object.values(this.installations);
     if (installations.length === 0) {
       console.log("📭 No installations found in registry.");
       return;
     }
 
-    // Sort by installation date (newest first)
     installations.sort((a, b) => new Date(b.installedAt) - new Date(a.installedAt));
 
     console.log(`📦 Found ${installations.length} installation(s):\n`);
@@ -132,7 +128,7 @@ class InstallationRegistry {
       const sizeStr = this.formatSize(install.size);
       const installedDate = new Date(install.installedAt).toLocaleDateString();
       const lastAccessedDate = new Date(install.lastAccessed).toLocaleDateString();
-      
+
       console.log(`${index + 1}. ${install.id}`);
       console.log(`   📅 Installed: ${installedDate}`);
       console.log(`   🕒 Last accessed: ${lastAccessedDate}`);
@@ -145,39 +141,38 @@ class InstallationRegistry {
       console.log("");
     });
 
-    // Summary statistics
-    const totalSize = installations.reduce((sum, install) => sum + install.size, 0);
+    const totalSize = installations.reduce((sum, i) => sum + i.size, 0);
     const releaseCount = installations.filter(i => i.type === "release").length;
     const snapshotCount = installations.filter(i => i.type === "snapshot").length;
-    
+
     console.log("📈 SUMMARY:");
     console.log(`   Total installations: ${installations.length}`);
     console.log(`   Releases: ${releaseCount} | Snapshots: ${snapshotCount}`);
     console.log(`   Total disk usage: ${this.formatSize(totalSize)}`);
   }
 
-  removeInstallation(versionId) {
-    if (this.installations[versionId]) {
-      delete this.installations[versionId];
+  removeInstallation(profileName) {
+    if (this.installations[profileName]) {
+      delete this.installations[profileName];
       this.saveRegistry();
-      console.log(`🗑️ Removed ${versionId} from registry`);
+      console.log(`🗑️ Removed ${profileName} from registry`);
       return true;
     }
     return false;
   }
 
-  getInstallation(versionId) {
-    return this.installations[versionId] || null;
+  getInstallation(profileName) {
+    return this.installations[profileName] || null;
   }
 
   getAllInstallations() {
     return Object.values(this.installations);
   }
 
-  pullInstallation(versionId) {
-    const installation = this.getInstallation(versionId);
+  pullInstallation(profileName) {
+    const installation = this.getInstallation(profileName);
     if (!installation) {
-      console.log(`❌ Installation ${versionId} not found in registry`);
+      console.log(`❌ Installation ${profileName} not found in registry`);
       return null;
     }
 
@@ -187,7 +182,6 @@ class InstallationRegistry {
         jsonPath: null
       };
 
-      // Check JAR file
       if (fs.existsSync(installation.jarPath)) {
         result.jarPath = installation.jarPath;
         console.log(`✅ JAR path: ${installation.jarPath}`);
@@ -195,7 +189,6 @@ class InstallationRegistry {
         console.log(`⚠️ JAR file not found: ${installation.jarPath}`);
       }
 
-      // Check JSON file
       if (fs.existsSync(installation.jsonPath)) {
         result.jsonPath = installation.jsonPath;
         console.log(`✅ JSON path: ${installation.jsonPath}`);
@@ -203,34 +196,31 @@ class InstallationRegistry {
         console.log(`⚠️ JSON file not found: ${installation.jsonPath}`);
       }
 
-      // Update last accessed time
-      this.updateLastAccessed(versionId);
-
-      console.log(`🎯 Successfully retrieved paths for ${versionId}`);
+      this.updateLastAccessed(profileName);
+      console.log(`🎯 Successfully retrieved paths for ${profileName}`);
       return result;
 
     } catch (error) {
-      console.error(`❌ Failed to get paths for ${versionId}:`, error.message);
+      console.error(`❌ Failed to get paths for ${profileName}:`, error.message);
       return null;
     }
   }
 
-  pullAllInstallations(destinationDir) {
+  pullAllInstallations() {
     const installations = this.getAllInstallations();
     if (installations.length === 0) {
       console.log("📭 No installations to pull");
       return false;
     }
 
-    console.log(`📦 Pulling ${installations.length} installations to ${destinationDir}...`);
+    console.log(`📦 Pulling ${installations.length} installations...`);
 
     let successCount = 0;
-    installations.forEach(installation => {
-      const versionDir = path.join(destinationDir, installation.id);
-      if (this.pullInstallation(installation.id, versionDir)) {
+    for (const install of installations) {
+      if (this.pullInstallation(install.profileName)) {
         successCount++;
       }
-    });
+    }
 
     console.log(`✅ Successfully pulled ${successCount}/${installations.length} installations`);
     return successCount > 0;
