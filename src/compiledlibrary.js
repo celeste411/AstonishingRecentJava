@@ -4,8 +4,8 @@ const registry = require('./registry');
 
 
 
-function addprofile(name) {
-  Forgeinstalation.main(name)
+function addprofile(name, version) {
+  Forgeinstalation.main(name, version)
 }
 
 function getprofile(name) {

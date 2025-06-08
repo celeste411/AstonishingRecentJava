@@ -1,25 +1,26 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
-const fs = require("fs");
-const path = require("path");
-const start = require("./src/compiledlibrary");
-
-function createWindow() {
-  const win = new BrowserWindow({
-    width: 400,
-    height: 300,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false, // WARNING: Only use this for prototyping
-    },
-  });
-
-  win.loadFile("MinecraftLauncher/index.html");
-}
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const start = require('./src/compiledlibrary.js');
+let mainWindow;
 
 app.whenReady().then(() => {
-  createWindow();
-
-  ipcMain.handle("do-node-stuff", async () => {
-    start.start();
+  mainWindow = new BrowserWindow({
+    webPreferences: {
+      preload: path.join(__dirname, 'src', 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
   });
+
+  mainWindow.loadFile('testingfrontendtogetthefeaturesworking/index.html');
+});
+
+ipcMain.handle('profile-with-version', (event, data) => {
+  const { profileName, version } = data;
+  console.log(`🚀 Creating profile "${profileName}" with version "${version.id}"`);
+  start.addprofile(profileName, version);
+});
+ipcMain.handle('runclient', (event, profilename) => {
+  start.runprofileunderclient(profilename);
+  console.log(`🚀 Running profile "${profilename}"`);
 });

@@ -8,7 +8,7 @@ const readline = require("readline");
 
 const skibs = require("./main");
 
-async function main(profileName) {
+async function main(profileName, selected) {
   try {
     console.log("🔧 Starting Forge Installation Process...");
     
@@ -17,7 +17,7 @@ async function main(profileName) {
     skibs.registry.displayInstallations();
     
     // Select Minecraft version
-    const selected = await minecraftlauncher.selectMinecraftVersion();
+
     
     if (!selected) {
       console.log("❌ No version selected. Exiting.");
